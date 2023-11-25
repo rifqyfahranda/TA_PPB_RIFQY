@@ -1,0 +1,29 @@
+.detail-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 2rem;
+}
+
+.detail-container .detail-image {
+    width: 300px !important;
+    border-radius: 10px !important;
+    object-fit: cover;
+}
+
+.detail {
+    text-align: center;
+    height: 90vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.detail-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    font-size: 1.2rem;
+    font-family: Poppins;
+    text-transform: capitalize;
+}
