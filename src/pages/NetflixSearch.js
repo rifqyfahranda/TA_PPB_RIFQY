@@ -4,12 +4,13 @@ import { useNavigate } from 'react-router-dom'
 
 // Components
 import Card from '../components/cardnetflix'
+import TempCard from '../components/tempcard/tempcard'
 
 export default function NetflixSearch() {
   const [data, setData] = useState(null)
   const [isLoaded, setisLoaded] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [query, setQuery] = useState('zombie')
+  const [query, setQuery] = useState('')
   const nav = useNavigate()
 
   useEffect(() => {
@@ -28,9 +29,9 @@ export default function NetflixSearch() {
               genres_relation: 'and',
               show_type: 'all',
             },
-            heers: {
+            headers: {
               'X-RapidAPI-Key':
-                '9e59e045d3mshee807d04193d9d1p17fce4jsn51a1fd8734eb',
+                '0c8a07a601msh98c3e115aa4289bp1f084ejsnefd431378921',
               'X-RapidAPI-Host': 'streaming-availability.p.rapidapi.com',
             },
           }
@@ -59,7 +60,7 @@ export default function NetflixSearch() {
     navToDetail(item)
   }
   const navToDetail = (item) => {
-    nav(`/detail/${item.id}`, { state: { itemData: item } })
+    nav(`/netflixdetail/${item.id}`, { state: { itemData: item } })
   }
   return (
     <main>
@@ -70,8 +71,8 @@ export default function NetflixSearch() {
       />
       <h3 className="title">Netflix Availability</h3>
       <h3 className="title">Search : {query}</h3>
-      {!data || isLoading ? (
-        <p>Loading...</p>
+      {query === '' ? (
+        <TempCard data={data} onClick={handleClick} />
       ) : (
         <div className="card-container">
           {data.result.map((item, index) => {

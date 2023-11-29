@@ -3,14 +3,13 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 // Components
-import Card from '../components/card'
-import TempCard from '../components/tempcard/tempcard'
+import Card from '../components/cardnetflix'
 
-export default function LandingPage() {
+export default function Adventure() {
   const [data, setData] = useState(null)
   const [isLoaded, setisLoaded] = useState(false)
   const [isLoading, setIsLoading] = useState(false)
-  const [query, setQuery] = useState('')
+  const [query, setQuery] = useState('adventure')
   const nav = useNavigate()
 
   useEffect(() => {
@@ -18,13 +17,16 @@ export default function LandingPage() {
       setIsLoading(true)
       try {
         const response = await axios.get(
-          'https://streaming-availability.p.rapidapi.com/search/title',
+          'https://streaming-availability.p.rapidapi.com/search/filters',
           {
             params: {
-              title: query,
+              services: 'netflix',
               country: 'us',
-              show_type: 'all',
+              keyword: query,
               output_language: 'en',
+              order_by: 'original_title',
+              genres_relation: 'and',
+              show_type: 'all',
             },
             headers: {
               'X-RapidAPI-Key':
@@ -40,47 +42,38 @@ export default function LandingPage() {
         }
       } catch (err) {
         console.log(err)
-      } finally {
         setIsLoading(false)
       }
     }
-
     if (!isLoaded) {
       fetchData(query)
     }
   }, [isLoaded, query])
-
   const onSearch = (e) => {
     if (e.key === 'Enter') {
       setisLoaded(false)
       setQuery(e.target.value)
     }
   }
-
   const handleClick = (item) => {
     navToDetail(item)
   }
-
   const navToDetail = (item) => {
-    nav(`/detailpage/${item.id}`, { state: { itemData: item } })
+    nav(`/detail/${item.id}`, { state: { itemData: item } })
   }
-
   return (
     <main>
-      <input
-        type="text"
-        placeholder="Search film by name"
-        onKeyDown={(e) => onSearch(e)}
-      />
-      <h3 className="title">All Movie</h3>
-      <h3 className="title">Search : {query}</h3>
-      {query === '' ? (
-        <TempCard data={data} onClick={handleClick} />
+      <h3 className="title">Adventure</h3>
+      {/* <h3 className="title">Search : {query}</h3> */}
+      {!data || isLoading ? (
+        <p>Loading...</p>
       ) : (
         <div className="card-container">
-          {data?.result.map((item, index) => (
-            <Card data={item} key={index} onClick={() => handleClick(item)} />
-          ))}
+          {data.result.map((item, index) => {
+            return (
+              <Card data={item} key={index} onClick={() => handleClick(item)} />
+            )
+          })}
         </div>
       )}
     </main>
